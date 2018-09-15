@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ProgressView mProgressView1, mProgressView2;
+    private ProgressView mProgressView, mProgressView1, mProgressView2;
     private Random r = new Random(1);
 
     @Override
@@ -17,9 +17,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mProgressView = findViewById(R.id.progressView);
         mProgressView1 = findViewById(R.id.progressView1);
         mProgressView2 = findViewById(R.id.progressView2);
         findViewById(R.id.btn_progress).setOnClickListener(this);
+        findViewById(R.id.btn_direction).setOnClickListener(this);
+
+        int[] colorList = new int[]{Color.GREEN, Color.YELLOW, Color.RED};
+        mProgressView2.applyGradient(colorList);
+        mProgressView1.applyGradient(colorList);
 
     }
 
@@ -27,9 +33,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view.getId() == R.id.btn_progress) {
             float progress = r.nextFloat();
+            mProgressView.setProgress(progress);
             mProgressView1.setProgress(progress);
             mProgressView2.setProgress(progress);
+        } else if (view.getId() == R.id.btn_direction) {
+            ProgressView.Direction d1 = mProgressView1.getProgressDirection();
+            mProgressView1.setProgressDirection(toggleDirection(d1));
+            ProgressView.Direction d2 = mProgressView2.getProgressDirection();
+            mProgressView2.setProgressDirection(toggleDirection(d2));
         }
     }
 
+    private ProgressView.Direction toggleDirection(ProgressView.Direction d) {
+        if (d == ProgressView.Direction.FROM_LEFT) {
+            return ProgressView.Direction.FROM_RIGHT;
+        }
+
+        return ProgressView.Direction.FROM_LEFT;
+    }
 }

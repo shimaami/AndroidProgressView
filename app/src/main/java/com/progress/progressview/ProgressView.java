@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
@@ -15,6 +16,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+
+import static com.progress.progressview.ProgressView.Direction.FROM_RIGHT;
 
 public class ProgressView extends View {
 
@@ -30,6 +33,7 @@ public class ProgressView extends View {
     private float mProgress = 0f; // progress from 0 to 1
     private Direction mProgressDirection = Direction.FROM_LEFT;
     private int mAnimationDuration = 1500;
+    private int[] mGradientColorList = null;
 
     private Paint mBackgroundPaint, mProgressPaint;
     private RectF mRectF;
@@ -57,7 +61,7 @@ public class ProgressView extends View {
         canvas.drawArc(mRectF, 180F, 180F, false, mBackgroundPaint);
         float progressSweepAngle = mProgress * 180;
         float startAngle = 180F;
-        if (mProgressDirection == Direction.FROM_RIGHT) {
+        if (mProgressDirection == FROM_RIGHT) {
             startAngle = 0f;
             progressSweepAngle = -progressSweepAngle;
         }
@@ -74,6 +78,21 @@ public class ProgressView extends View {
         setMeasuredDimension(min, min / 2);
         float highStroke = Math.max(mProgressWidth, mBackgroundWidth);
         mRectF.set(0 + highStroke / 2, 0 + highStroke / 2, min - highStroke / 2, min - highStroke / 2);
+
+        updateShader();
+    }
+
+    public void applyGradient(int[] colorList) {
+        if (colorList != null) {
+            mGradientColorList = new int[colorList.length];
+            System.arraycopy(colorList, 0, mGradientColorList, 0, colorList.length);
+        } else {
+            mGradientColorList = null;
+        }
+        if (mGradientColorList != null && mProgressDirection == FROM_RIGHT) {
+            reverse(mGradientColorList);
+        }
+        updateShader();
     }
 
     public void setProgress(float progress) {
@@ -91,7 +110,12 @@ public class ProgressView extends View {
     }
 
     public void setProgressDirection(Direction progressDirection) {
+        if (mGradientColorList != null && progressDirection != mProgressDirection) {
+            reverse(mGradientColorList);
+            updateShader();
+        }
         this.mProgressDirection = progressDirection;
+        invalidate();
     }
 
     public void setAnimationDuration(int animationDuration) {
@@ -110,6 +134,14 @@ public class ProgressView extends View {
         invalidate();
     }
 
+    public float getProgress() {
+        return mProgress;
+    }
+
+    public Direction getProgressDirection() {
+        return mProgressDirection;
+    }
+
     private void init(Context context, @Nullable AttributeSet attrs) {
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ProgressView, 0, 0);
@@ -118,7 +150,7 @@ public class ProgressView extends View {
         if (direction == 0) {
             mProgressDirection = Direction.FROM_LEFT;
         } else {
-            mProgressDirection = Direction.FROM_RIGHT;
+            mProgressDirection = FROM_RIGHT;
         }
 
         mProgress = typedArray.getFloat(R.styleable.ProgressView_pvProgress, mProgress);
@@ -158,9 +190,30 @@ public class ProgressView extends View {
         animator.start();
     }
 
+    private void updateShader() {
+        if (mGradientColorList == null) {
+            mProgressPaint.setShader(null);
+            invalidate();
+            return;
+        }
+        int width = getMeasuredWidth();
+
+        LinearGradient lg = new LinearGradient(0f, width / 2, width, width / 2, mGradientColorList, null, android.graphics.Shader.TileMode.CLAMP);
+        mProgressPaint.setShader(lg);
+        invalidate();
+    }
+
     private static float dpToPx(Context context, float dp){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    private static void reverse(int[] array) {
+        for (int i = 0; i < array.length / 2; i++) {
+            int temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
     }
 }

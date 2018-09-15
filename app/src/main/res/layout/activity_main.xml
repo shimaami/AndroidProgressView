@@ -50,7 +50,7 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             app:pvBackgroundColor="@color/colorPrimary"
-            app:pvBackgroundWidth="1dp"
+            app:pvBackgroundWidth="10dp"
             app:pvDirection="fromRight"
             app:pvProgress="0.5"
             app:pvProgressColor="@color/colorAccent"
@@ -63,4 +63,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Update Progress" />
+
+    <Button
+        android:id="@+id/btn_direction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Change direction" />
+
+
+    <com.progress.progressview.ProgressView
+        android:id="@+id/progressView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:pvProgress="1"
+        app:pvDirection="fromLeft" />
+
+
 </LinearLayout>
