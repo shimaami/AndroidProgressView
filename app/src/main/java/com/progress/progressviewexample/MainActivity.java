@@ -1,9 +1,11 @@
-package com.progress.progressview;
+package com.progress.progressviewexample;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.progress.progressview.ProgressView;
 
 import java.util.Random;
 

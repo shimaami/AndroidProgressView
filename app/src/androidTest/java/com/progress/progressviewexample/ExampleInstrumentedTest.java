@@ -1,4 +1,4 @@
-package com.progress.progressview;
+package com.progress.progressviewexample;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
