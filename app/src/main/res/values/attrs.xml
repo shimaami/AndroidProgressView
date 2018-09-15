@@ -5,6 +5,11 @@
             <enum name="fromLeft" value="0"/>
             <enum name="fromRight" value="1"/>
         </attr>
+        <attr name="pvShape" format="enum">
+            <enum name="arc" value="0"/>
+            <enum name="circle" value="1"/>
+            <enum name="line" value="2"/>
+        </attr>
         <attr name="pvProgress" format="float" />
         <attr name="pvBackgroundColor" format="color" />
         <attr name="pvProgressColor" format="color" />

@@ -9,7 +9,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ProgressView mProgressView, mProgressView1, mProgressView2;
+    private ProgressView mProgressView, mProgressView1, mProgressView2,
+            mProgressLine, mProgressCircle;
     private Random r = new Random(1);
 
     @Override
@@ -20,12 +21,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mProgressView = findViewById(R.id.progressView);
         mProgressView1 = findViewById(R.id.progressView1);
         mProgressView2 = findViewById(R.id.progressView2);
+        mProgressLine = findViewById(R.id.progressLine);
+        mProgressCircle = findViewById(R.id.progressCircle);
         findViewById(R.id.btn_progress).setOnClickListener(this);
         findViewById(R.id.btn_direction).setOnClickListener(this);
 
         int[] colorList = new int[]{Color.GREEN, Color.YELLOW, Color.RED};
         mProgressView2.applyGradient(colorList);
         mProgressView1.applyGradient(colorList);
+        mProgressLine.applyGradient(colorList);
+        mProgressCircle.applyGradient(colorList);
 
     }
 
@@ -36,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mProgressView.setProgress(progress);
             mProgressView1.setProgress(progress);
             mProgressView2.setProgress(progress);
+            mProgressLine.setProgress(progress);
+            mProgressCircle.setProgress(progress);
         } else if (view.getId() == R.id.btn_direction) {
             ProgressView.Direction d1 = mProgressView1.getProgressDirection();
             mProgressView1.setProgressDirection(toggleDirection(d1));

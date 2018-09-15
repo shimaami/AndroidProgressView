@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -28,10 +29,16 @@ public class ProgressView extends View {
         FROM_LEFT, FROM_RIGHT
     }
 
+    public enum Shape
+    {
+        ARC, CIRCLE, LINE
+    }
+
     private float mBackgroundWidth, mProgressWidth;
     private @ColorInt int mBackgroundColor, mProgressColor;
     private float mProgress = 0f; // progress from 0 to 1
     private Direction mProgressDirection = Direction.FROM_LEFT;
+    private Shape mShape = Shape.ARC;
     private int mAnimationDuration = 1500;
     private int[] mGradientColorList = null;
 
@@ -58,14 +65,13 @@ public class ProgressView extends View {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        canvas.drawArc(mRectF, 180F, 180F, false, mBackgroundPaint);
-        float progressSweepAngle = mProgress * 180;
-        float startAngle = 180F;
-        if (mProgressDirection == FROM_RIGHT) {
-            startAngle = 0f;
-            progressSweepAngle = -progressSweepAngle;
+        if (mShape == Shape.ARC) {
+            drawArc(canvas);
+        } else if (mShape == Shape.CIRCLE) {
+            drawCircle(canvas);
+        } else {
+            drawLine(canvas);
         }
-        canvas.drawArc(mRectF, startAngle, progressSweepAngle, false, mProgressPaint);
 
     }
 
@@ -75,10 +81,16 @@ public class ProgressView extends View {
         final int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
         final int width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         final int min = Math.min(width, height);
-        setMeasuredDimension(min, min / 2);
         float highStroke = Math.max(mProgressWidth, mBackgroundWidth);
         mRectF.set(0 + highStroke / 2, 0 + highStroke / 2, min - highStroke / 2, min - highStroke / 2);
 
+        if (mShape == Shape.ARC) {
+            setMeasuredDimension(min, min / 2);
+        } else if (mShape == Shape.CIRCLE) {
+            setMeasuredDimension(min, min);
+        } else {
+            setMeasuredDimension(width, (int) Math.max(highStroke, height));
+        }
         updateShader();
     }
 
@@ -147,11 +159,10 @@ public class ProgressView extends View {
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ProgressView, 0, 0);
 
         int direction = typedArray.getInt(R.styleable.ProgressView_pvDirection, 0);
-        if (direction == 0) {
-            mProgressDirection = Direction.FROM_LEFT;
-        } else {
-            mProgressDirection = FROM_RIGHT;
-        }
+        mProgressDirection = direction == 0 ? Direction.FROM_LEFT : FROM_RIGHT;
+
+        int shape = typedArray.getInt(R.styleable.ProgressView_pvShape, 0);
+        mShape = shape == 0 ? Shape.ARC : shape == 1 ? Shape.CIRCLE : Shape.LINE;
 
         mProgress = typedArray.getFloat(R.styleable.ProgressView_pvProgress, mProgress);
         mBackgroundWidth = typedArray.getDimension(R.styleable.ProgressView_pvBackgroundWidth, dpToPx(context, 2));
@@ -197,10 +208,45 @@ public class ProgressView extends View {
             return;
         }
         int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
 
-        LinearGradient lg = new LinearGradient(0f, width / 2, width, width / 2, mGradientColorList, null, android.graphics.Shader.TileMode.CLAMP);
-        mProgressPaint.setShader(lg);
+        Shader shader;
+        if (mShape == Shape.ARC) {
+            shader = new LinearGradient(0, width / 2, width, height, mGradientColorList, null, android.graphics.Shader.TileMode.CLAMP);
+        } else  if (mShape == Shape.CIRCLE) {
+            shader = new LinearGradient(0, 0, width, height, mGradientColorList, null, android.graphics.Shader.TileMode.CLAMP);
+        } else {
+            shader = new LinearGradient(0, 0, width, 0, mGradientColorList, null, android.graphics.Shader.TileMode.CLAMP);
+        }
+        mProgressPaint.setShader(shader);
         invalidate();
+    }
+
+    private void drawArc(Canvas canvas) {
+        drawArc(canvas, 180);
+    }
+
+    private void drawCircle(Canvas canvas) {
+        drawArc(canvas, 360);
+    }
+
+    private void drawLine(Canvas canvas) {
+        float y = canvas.getHeight() / 2;
+        canvas.drawLine(0, y, canvas.getWidth(), y, mBackgroundPaint);
+        float progressWidth = mProgress * canvas.getWidth();
+        canvas.drawLine(0, y, progressWidth, y, mProgressPaint);
+    }
+
+    private void drawArc(Canvas canvas, float sweepAngle) {
+        canvas.drawArc(mRectF, 180, sweepAngle, false, mBackgroundPaint);
+        float progressSweepAngle = mProgress * sweepAngle;
+        float startAngle = 180;
+        if (mProgressDirection == FROM_RIGHT) {
+            startAngle = 0f;
+            progressSweepAngle = -progressSweepAngle;
+        }
+        canvas.drawArc(mRectF, startAngle, progressSweepAngle, false, mProgressPaint);
+
     }
 
     private static float dpToPx(Context context, float dp){
