@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressView">
+        <attr name="pvDirection" format="enum">
+            <enum name="fromLeft" value="0"/>
+            <enum name="fromRight" value="1"/>
+        </attr>
+        <attr name="pvProgress" format="float" />
+        <attr name="pvBackgroundColor" format="color" />
+        <attr name="pvProgressColor" format="color" />
+        <attr name="pvBackgroundWidth" format="dimension" />
+        <attr name="pvProgressWidth" format="dimension" />
+        <attr name="pvAnimateDuration" format="integer" />
+    </declare-styleable>
+</resources>
