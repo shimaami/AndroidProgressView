@@ -6,7 +6,7 @@ Progress view with arc, line and circle shapes and gradient effect
 
 # Attributes
 | Name  | Description | Type | Default | Range |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
 | pvDirection  | Direction of the progress  | enum | fromLeft (clockwise) | fromLeft, fromRight |
 | pvShape  | Shape of the progress view  | enum | Arc | arc, circle, line |
 | pvProgress  | Progress value  | float | 0 | 0 to 1 |
