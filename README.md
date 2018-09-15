@@ -8,7 +8,7 @@ Progress view with arc, line and circle shapes and gradient effect
 | Name  | Description | Type | Default | Range |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | pvDirection  | Direction of the progress  | enum | fromLeft (clockwise) | fromLeft, fromRight |
-| pvShape  | Shape of the progress view  | enum | Arc | arc, circle, line |
+| pvShape  | Shape of the progress view  | enum | arc | arc, circle, line |
 | pvProgress  | Progress value  | float | 0 | 0 to 1 |
 | pvBackgroundColor  | Progress background color  | color | Color.BLACK | - |
 | pvProgressColor  | Progress color  | color | Color.RED | - |
@@ -16,3 +16,20 @@ Progress view with arc, line and circle shapes and gradient effect
 | pvProgressWidth  | Progress width  | dimension | 10dp | - |
 | pvAnimateDuration  | Animation duration  | integer | 1500 | - |
 
+# Home To Use
+### XML
+```
+<com.progress.progressview.ProgressView
+            android:id="@+id/progressView"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            app:pvDirection="fromLeft"
+            app:pvShape="arc"
+            app:pvProgress="1" />
+```
+### Apply gradient effect
+```
+ int[] colorList = new int[]{Color.GREEN, Color.YELLOW, Color.RED};
+        mProgressView.applyGradient(colorList);
+```
