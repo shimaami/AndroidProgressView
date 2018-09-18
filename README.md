@@ -16,6 +16,25 @@ Progress view with arc, line and circle shapes and gradient effect
 | pvProgressWidth  | Progress width  | dimension | 10dp | - |
 | pvAnimateDuration  | Animation duration  | integer | 1500 | - |
 
+# Home To Install
+```
+allprojects {
+    repositories {
+        ...
+        jcenter()
+    }
+}
+```
+```
+implementation 'com.shimaami.android:progressview:1.0'
+```
+If you have problems with appcompat use
+```
+implementation ("com.shimaami.android:progressview:1.0") {
+    exclude module: "appcompat-v7"
+}
+```
+
 # Home To Use
 ### XML
 ```
