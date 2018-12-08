@@ -46,10 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mProgressLine.setProgress(progress);
             mProgressCircle.setProgress(progress);
         } else if (view.getId() == R.id.btn_direction) {
-            ProgressView.Direction d1 = mProgressView1.getProgressDirection();
-            mProgressView1.setProgressDirection(toggleDirection(d1));
-            ProgressView.Direction d2 = mProgressView2.getProgressDirection();
-            mProgressView2.setProgressDirection(toggleDirection(d2));
+            mProgressView1.setProgressDirection(toggleDirection(mProgressView1.getProgressDirection()));
+            mProgressView2.setProgressDirection(toggleDirection(mProgressView2.getProgressDirection()));
+            mProgressCircle.setProgressDirection(toggleDirection(mProgressCircle.getProgressDirection()));
+            mProgressLine.setProgressDirection(toggleDirection(mProgressLine.getProgressDirection()));
+
         }
     }
 

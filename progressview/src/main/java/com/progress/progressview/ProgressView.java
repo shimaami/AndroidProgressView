@@ -237,7 +237,11 @@ public class ProgressView extends View {
         float y = canvas.getHeight() / 2;
         canvas.drawLine(0, y, canvas.getWidth(), y, mBackgroundPaint);
         float progressWidth = mProgress * canvas.getWidth();
-        canvas.drawLine(0, y, progressWidth, y, mProgressPaint);
+        if (mProgressDirection == FROM_RIGHT) {
+            canvas.drawLine(canvas.getWidth(), y, canvas.getWidth() - progressWidth, y, mProgressPaint);
+        } else {
+            canvas.drawLine(0, y, progressWidth, y, mProgressPaint);
+        }
     }
 
     private void drawArc(Canvas canvas, float sweepAngle) {
