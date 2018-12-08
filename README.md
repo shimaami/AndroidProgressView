@@ -1,6 +1,8 @@
 # AndroidProgressView
 Progress view with arc, line and circle shapes and gradient effect
 
+### [New] Kotlin version
+Check [here](https://github.com/shimaami/AndroidProgressView-Kotlin)
 
 ![](ProgressView.gif)
 
@@ -26,7 +28,7 @@ allprojects {
 }
 ```
 ```
-implementation 'com.shimaami.android:progressview:1.0'
+implementation 'com.shimaami.android:progressview:1.0.1'
 ```
 If you have problems with appcompat use
 ```
