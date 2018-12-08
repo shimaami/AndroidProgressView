@@ -89,6 +89,7 @@ public class ProgressView extends View {
         } else if (mShape == Shape.CIRCLE) {
             setMeasuredDimension(min, min);
         } else {
+            mRectF.set(0, 0 + highStroke / 2, min, highStroke / 2);
             setMeasuredDimension(width, (int) Math.max(highStroke, height));
         }
         updateShader();
@@ -113,11 +114,13 @@ public class ProgressView extends View {
 
     public void setBackgroundWidth(float backgroundWidth) {
         this.mBackgroundWidth = backgroundWidth;
+        mBackgroundPaint.setStrokeWidth(backgroundWidth);
         invalidate();
     }
 
     public void setProgressWidth(float progressWidth) {
         this.mProgressWidth = progressWidth;
+        mProgressPaint.setStrokeWidth(progressWidth);
         invalidate();
     }
 
